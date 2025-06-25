@@ -1,28 +1,33 @@
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const location = useLocation();
+  const {user,logout}=useAuth();
+  console.log(user);
   const isLoginPage = location.pathname === "/login";
   const isRegisterPage = location.pathname === "/register";
   return (
     <nav className="flex items-center justify-between px-6 py-4 bg-gray-50 shadow-md">
-      <Link to="/" className="text-xl font-bold text-gray-900">
+      <Link to="/" className="text-2xl font-bold text-gray-900 tracking-wide hover:opacity-80 transition">
        🛒 Inventory System
       </Link>
-      <div>
-        {isLoginPage && (
-          <Link to="/register">
-            <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
-              Register
+      <div className="flex items-center space-x-4">
+        {!user ? (
+          <>
+            <Link to="/login" className="text-gray-700 font-medium hover:text-indigo-600 transition">Login</Link>
+            <Link to="/register" className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition font-medium">Register</Link>
+          </>
+        ) : (
+          <>
+            <span className="text-gray-600 font-medium">Hi, {user}</span>
+            <button
+              onClick={logout}
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition font-medium"
+            >
+              Logout
             </button>
-          </Link>
-        )}
-        {isRegisterPage && (
-          <Link to="/login">
-            <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
-              Login
-            </button>
-          </Link>
+          </>
         )}
       </div>
     </nav>

@@ -1,19 +1,45 @@
-// src/pages/Login.jsx
-import React from 'react';
-
+import { useState,useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import { loginUser } from '../api/auth';
+import { useAuth } from '../context/AuthContext';
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const data = await loginUser({ username, password });
+    console.log("USER DATA: "+data);
+    login({ token: data.token, user: data.username }); // from context
+    navigate("/");
+  } catch (err) {
+    setError("Invalid credentials");
+    console.error(err);
+  }
+};
+
   return (
     <div className="flex-1 flex items-center justify-center px-4 bg-gray-50">
       <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Sign in to your account</h2>
+         {error && <div className="text-red-500 mb-4">{error}</div>}
         
-        <form className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">UserName</label>
             <input
-              type="email"
+              type="text"
+              value={username}
+              onChange={(e)=>{
+                setUsername(e.target.value);
+              }}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="you@example.com"
+              placeholder="your username"
             />
           </div>
 
@@ -21,6 +47,10 @@ const Login = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <input
               type="password"
+              value={password}
+              onChange={(e)=>{
+                setPassword(e.target.value);
+              }}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="••••••••"
             />
