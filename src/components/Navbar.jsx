@@ -1,12 +1,8 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const location = useLocation();
   const {user,logout}=useAuth();
-  console.log(user);
-  const isLoginPage = location.pathname === "/login";
-  const isRegisterPage = location.pathname === "/register";
   return (
     <nav className="flex items-center justify-between px-6 py-4 bg-gray-50 shadow-md">
       <Link to="/" className="text-2xl font-bold text-gray-900 tracking-wide hover:opacity-80 transition">

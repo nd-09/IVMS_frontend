@@ -16,7 +16,7 @@ function App() {
       <Layout>
         <Routes>
           <Route
-            path="/"
+            path=""
             element={
               <ProtectedRoute>
                 <Dashboard />

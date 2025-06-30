@@ -1,25 +1,28 @@
-import { useState,useContext } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
 import { loginUser } from '../api/auth';
 import { useAuth } from '../context/AuthContext';
+import {useLoader} from '../context/LoaderContext'
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
+  const{setLoading}= useLoader();
 
   const handleSubmit = async (e) => {
   e.preventDefault();
   try {
+    setLoading(true);
     const data = await loginUser({ username, password });
-    console.log("USER DATA: "+data);
-    login({ token: data.token, user: data.username }); // from context
+    login({ token: data.token, user: data.username,role:data.role });
     navigate("/");
   } catch (err) {
     setError("Invalid credentials");
     console.error(err);
+  }finally{
+    setLoading(false);
   }
 };
 
@@ -36,6 +39,7 @@ const Login = () => {
               type="text"
               value={username}
               onChange={(e)=>{
+                setError(null);
                 setUsername(e.target.value);
               }}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
@@ -49,6 +53,7 @@ const Login = () => {
               type="password"
               value={password}
               onChange={(e)=>{
+                setError(null);
                 setPassword(e.target.value);
               }}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"

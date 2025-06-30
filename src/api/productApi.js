@@ -1,12 +1,16 @@
-import axios from 'axios';
+import axiosInstance from './axios';
 
-const BASE_URL = 'http://localhost:8080/api/v1/products';
-
-export const fetchProductById = async (id) => {
-  const response = await axios.get(`${BASE_URL}/${id}`);
+export const fetchAllProducts = async () => {
+  const response = await axiosInstance.get('/products');
   return response.data;
 };
-export const fetchAllProducts = async () => {
-  const response = await axios.get(BASE_URL);
+
+export const fetchProductById = async (id) => {
+  const response = await axiosInstance.get(`/products/${id}`);
+  return response.data;
+};
+
+export const fetchDashboardStats = async () => {
+  const response = await axiosInstance.get('/products/stats');
   return response.data;
 };

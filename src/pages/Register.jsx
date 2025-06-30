@@ -20,9 +20,8 @@ const Register = () => {
       }
     try {
       const response = await registerUser({username,email, password, role});
-      console.log("Register USER: "+response);
       if(response){
-      login({ token: response.token, user: response.username });
+      login({ token: response.token, user: response.username,role:response.role });
       navigate("/");
       }
     } catch (err) {
@@ -47,6 +46,7 @@ const Register = () => {
             value={username}
             maxLength={25}
             onChange={(e)=>{
+              setError(null);
               setUsername(e.target.value);
             }}
             placeholder="Username"
@@ -57,6 +57,7 @@ const Register = () => {
             value={email}
             maxLength={30}
             onChange={(e)=>{
+              setError(null);
               setEmail(e.target.value);
             }}
             placeholder="Email"
@@ -66,6 +67,7 @@ const Register = () => {
             type="password"
             value={password}
             onChange={(e)=>{
+              setError(null);
               setPassword(e.target.value)
             }}
             placeholder="Password"
@@ -75,6 +77,7 @@ const Register = () => {
             type="password"
             value={confirmPassword}
             onChange={(e)=>{
+              setError(null);
               setConfirmPassword(e.target.value)
             }}
             placeholder="Confirm Password"
